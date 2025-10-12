@@ -42,6 +42,16 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'NFT'
   }],
+  wallet: {
+    address: {
+      type: String,
+      default: ''
+    },
+    balance: {
+      type: Number,
+      default: 0
+    }
+  },
   createdAt: {
     type: Date,
     default: Date.now

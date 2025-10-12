@@ -1,14 +1,24 @@
 const express = require('express');
-const authController = require('../controllers/authController');
-const authMiddleware = require('../middleware/authMiddleware');
+const { login, register } = require('../controllers/authController');
+const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Rotas públicas
-router.post('/login', authController.login);
-router.post('/register', authController.register);
+// Rotas públicas de autenticação
+router.post('/login', login);
+router.post('/register', register);
 
-// Rotas protegidas
-router.get('/verify', authMiddleware.authenticate, authController.verifyToken);
+// Rota protegida para verificar o status da autenticação
+router.get('/me', protect, (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role
+    }
+  });
+});
 
 module.exports = router;

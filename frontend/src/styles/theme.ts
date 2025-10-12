@@ -1,3 +1,74 @@
+export interface Theme {
+  breakpoints: {
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    xxl: string;
+  };
+  spacing: {
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    xxl: string;
+  };
+  typography: {
+    fontFamily: string;
+    fontSizes: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      xxl: string;
+    };
+    fontWeights: {
+      light: number;
+      regular: number;
+      medium: number;
+      semiBold: number;
+      bold: number;
+    };
+  };
+  borderRadius: {
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    circle: string;
+  };
+  zIndex: {
+    modal: number;
+    dropdown: number;
+    tooltip: number;
+    navbar: number;
+  };
+  colors: {
+    primary: string;
+    primaryDark: string;
+    secondary: string;
+    secondaryDark: string;
+    success: string;
+    successDark: string;
+    warning: string;
+    warningDark: string;
+    error: string;
+    errorDark: string;
+    errorLight: string;
+    background: string;
+    backgroundLight: string;
+    backgroundDark: string;
+    text: string;
+    textSecondary: string;
+    textLight: string;
+    border: string;
+    cardBackground: string;
+  };
+}
+
 const baseTheme = {
   breakpoints: {
     xs: '0px',
@@ -45,6 +116,27 @@ const baseTheme = {
     dropdown: 100,
     tooltip: 500,
     navbar: 900
+  },
+  colors: {
+    primary: '#6e48aa',
+    primaryDark: '#5a3a8c',
+    secondary: '#ff7e5f',
+    secondaryDark: '#e56e54',
+    success: '#28a745',
+    successDark: '#218838',
+    warning: '#ffc107',
+    warningDark: '#e0a800',
+    error: '#dc3545',
+    errorDark: '#c82333',
+    errorLight: '#f8d7da',
+    background: '#ffffff',
+    backgroundLight: '#f8f9fa',
+    backgroundDark: '#343a40',
+    text: '#212529',
+    textSecondary: '#6c757d',
+    textLight: '#f8f9fa',
+    border: '#dee2e6',
+    cardBackground: '#ffffff'
   }
 };
 

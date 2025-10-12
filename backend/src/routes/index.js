@@ -1,6 +1,8 @@
 const express = require('express');
 const authRoutes = require('./authRoutes');
 const nftRoutes = require('./nftRoutes');
+const aiRoutes = require('./aiRoutes');
+const cmsRoutes = require('./cmsRoutes');
 
 const router = express.Router();
 
@@ -12,11 +14,7 @@ router.get('/status', (req, res) => {
 // Registrar rotas
 router.use('/auth', authRoutes);
 router.use('/nfts', nftRoutes);
-
-// Rotas futuras
-// router.use('/users', userRoutes);
-// router.use('/marketplace', marketplaceRoutes);
-// router.use('/ai', aiRoutes);
-// router.use('/cms', cmsRoutes);
+router.use('/ai', aiRoutes);
+router.use('/cms', cmsRoutes);
 
 module.exports = router;

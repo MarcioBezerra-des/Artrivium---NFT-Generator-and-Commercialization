@@ -1,11 +1,58 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { userService } = require('../services/userService');
+const User = require('../models/userModel');
+
+// Gerar token JWT
+const generateToken = (user) => {
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+};
 
 // Controlador de autenticação
-const authController = {
-  // Login de usuário
-  login: async (req, res, next) => {
+exports.register = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+    
+    // Verificar se o usuário já existe
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email já está em uso'
+      });
+    }
+    
+    // Criar novo usuário
+    const user = await User.create({
+      name,
+      email,
+      password: await bcrypt.hash(password, 12)
+    });
+    
+    // Gerar token
+    const token = generateToken(user);
+    
+    // Enviar resposta
+    res.status(201).json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Login de usuário
+exports.login = async (req, res, next) => {
     try {
       const { email, password } = req.body;
       
@@ -15,26 +62,29 @@ const authController = {
       }
       
       // Buscar usuário pelo email
-      const user = await userService.findByEmail(email);
+      const user = await User.findOne({ email }).select('+password');
       if (!user) {
-        return res.status(401).json({ message: 'Credenciais inválidas' });
+        return res.status(401).json({ 
+          success: false,
+          message: 'Credenciais inválidas' 
+        });
       }
       
       // Verificar senha
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Credenciais inválidas' });
+        return res.status(401).json({ 
+          success: false,
+          message: 'Credenciais inválidas' 
+        });
       }
       
       // Gerar token JWT
-      const token = jwt.sign(
-        { id: user._id, email: user.email, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
+      const token = generateToken(user);
       
       // Retornar dados do usuário e token
       res.json({
+        success: true,
         user: {
           id: user._id,
           name: user.name,
